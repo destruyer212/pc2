@@ -4,6 +4,7 @@ import com.utp.pc2.incidencias.dto.EstadoIncidenciaRequest;
 import com.utp.pc2.incidencias.dto.IncidenciaRequest;
 import com.utp.pc2.incidencias.model.Incidencia;
 import com.utp.pc2.incidencias.service.IncidenciaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/incidencias")
 @RequiredArgsConstructor
+@Tag(name = "Pregunta 2 - Incidencias", description = "Gestor de incidencias de laboratorio")
 public class IncidenciaController {
 
     private final IncidenciaService incidenciaService;

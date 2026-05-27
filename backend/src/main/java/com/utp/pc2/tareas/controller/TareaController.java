@@ -3,6 +3,7 @@ package com.utp.pc2.tareas.controller;
 import com.utp.pc2.tareas.dto.TareaRequest;
 import com.utp.pc2.tareas.model.Tarea;
 import com.utp.pc2.tareas.service.TareaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tareas")
 @RequiredArgsConstructor
+@Tag(name = "Pregunta 4 - Tareas", description = "Gestor de tareas académicas")
 public class TareaController {
 
     private final TareaService tareaService;

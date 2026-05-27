@@ -5,6 +5,7 @@ import com.utp.pc2.cursos.model.Curso;
 import com.utp.pc2.cursos.model.Matricula;
 import com.utp.pc2.cursos.service.CursoService;
 import com.utp.pc2.cursos.service.MatriculaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Tag(name = "Pregunta 3 - Cursos", description = "Cursos y matrículas")
 public class CursoController {
 
     private final CursoService cursoService;
