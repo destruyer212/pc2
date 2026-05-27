@@ -1,0 +1,267 @@
+-- ============================================================
+-- PC2 UTP - Consultas SQL para demostración (Supabase)
+-- Ejecutar en: Supabase → SQL Editor
+-- ============================================================
+
+-- ------------------------------------------------------------
+-- 0. RESUMEN GENERAL (todas las tablas)
+-- ------------------------------------------------------------
+
+SELECT 'productos'   AS tabla, COUNT(*)::TEXT AS registros FROM productos
+UNION ALL SELECT 'pedidos',      COUNT(*)::TEXT FROM pedidos
+UNION ALL SELECT 'incidencias',  COUNT(*)::TEXT FROM incidencias
+UNION ALL SELECT 'cursos',       COUNT(*)::TEXT FROM cursos
+UNION ALL SELECT 'matriculas',   COUNT(*)::TEXT FROM matriculas
+UNION ALL SELECT 'tareas',       COUNT(*)::TEXT FROM tareas
+ORDER BY tabla;
+
+-- Migraciones aplicadas
+SELECT version, description, applied_at
+FROM schema_migrations
+ORDER BY version;
+
+
+-- ============================================================
+-- PREGUNTA 1 - CAFETERÍA UTP
+-- Tablas: productos, pedidos
+-- API: GET /api/productos | POST /api/pedidos
+-- ============================================================
+
+-- 1.1 Listar todos los productos (catálogo)
+SELECT id, nombre, categoria, precio, stock, created_at
+FROM productos
+ORDER BY categoria, nombre;
+
+-- 1.2 Productos sin stock (requisito visual en Angular)
+SELECT id, nombre, categoria, precio, stock
+FROM productos
+WHERE stock = 0;
+
+-- 1.3 Productos disponibles para pedido
+SELECT id, nombre, categoria, precio, stock
+FROM productos
+WHERE stock > 0
+ORDER BY nombre;
+
+-- 1.4 Detalle de un producto por ID
+SELECT * FROM productos WHERE id = 1;
+
+-- 1.5 Todos los pedidos con nombre del producto (JOIN)
+SELECT
+    p.id,
+    p.nombre_estudiante,
+    pr.nombre          AS producto,
+    pr.categoria,
+    pr.precio,
+    p.cantidad,
+    (pr.precio * p.cantidad) AS subtotal_soles,
+    p.observacion,
+    p.created_at       AS fecha_pedido
+FROM pedidos p
+INNER JOIN productos pr ON pr.id = p.producto_id
+ORDER BY p.created_at DESC;
+
+-- 1.6 Último pedido registrado
+SELECT
+    p.id,
+    p.nombre_estudiante,
+    pr.nombre AS producto,
+    p.cantidad,
+    p.observacion,
+    p.created_at
+FROM pedidos p
+INNER JOIN productos pr ON pr.id = p.producto_id
+ORDER BY p.created_at DESC
+LIMIT 5;
+
+-- 1.7 Total vendido por categoría
+SELECT
+    pr.categoria,
+    COUNT(p.id) AS cantidad_pedidos,
+    SUM(p.cantidad) AS unidades_vendidas,
+    SUM(pr.precio * p.cantidad) AS monto_total
+FROM pedidos p
+INNER JOIN productos pr ON pr.id = p.producto_id
+GROUP BY pr.categoria
+ORDER BY monto_total DESC;
+
+
+-- ============================================================
+-- PREGUNTA 2 - INCIDENCIAS DE LABORATORIO
+-- Tabla: incidencias
+-- API: GET /api/incidencias | POST | PUT /estado
+-- ============================================================
+
+-- 2.1 Listar todas las incidencias
+SELECT id, aula, equipo, tipo, descripcion, estado, created_at, updated_at
+FROM incidencias
+ORDER BY created_at DESC;
+
+-- 2.2 Incidencias por estado (colores en Angular)
+SELECT estado, COUNT(*) AS cantidad
+FROM incidencias
+GROUP BY estado
+ORDER BY cantidad DESC;
+
+-- 2.3 Solo pendientes
+SELECT * FROM incidencias
+WHERE estado = 'PENDIENTE'
+ORDER BY created_at;
+
+-- 2.4 Solo en proceso
+SELECT * FROM incidencias
+WHERE estado = 'EN_PROCESO';
+
+-- 2.5 Solo atendidas
+SELECT * FROM incidencias
+WHERE estado = 'ATENDIDA';
+
+-- 2.6 Incidencias por aula
+SELECT aula, COUNT(*) AS total_incidencias
+FROM incidencias
+GROUP BY aula
+ORDER BY total_incidencias DESC;
+
+-- 2.7 Total para dashboard (GET /api/incidencias/total)
+SELECT COUNT(*) AS total_incidencias FROM incidencias;
+
+
+-- ============================================================
+-- PREGUNTA 3 - CURSOS Y MATRÍCULAS
+-- Tablas: cursos, matriculas
+-- API: GET /api/cursos | POST /api/matriculas
+-- ============================================================
+
+-- 3.1 Listar cursos disponibles
+SELECT id, codigo, nombre, docente, creditos, vacantes, created_at
+FROM cursos
+ORDER BY codigo;
+
+-- 3.2 Cursos con vacantes disponibles
+SELECT codigo, nombre, docente, vacantes
+FROM cursos
+WHERE vacantes > 0
+ORDER BY vacantes DESC;
+
+-- 3.3 Cursos sin vacantes (llenos)
+SELECT codigo, nombre, vacantes
+FROM cursos
+WHERE vacantes = 0;
+
+-- 3.4 Detalle de un curso por ID
+SELECT * FROM cursos WHERE id = 1;
+
+-- 3.5 Todas las matrículas con nombre del curso (JOIN)
+SELECT
+    m.id,
+    m.nombre_estudiante,
+    m.codigo_estudiante,
+    c.codigo,
+    c.nombre AS curso,
+    c.docente,
+    m.estado,
+    m.created_at AS fecha_matricula
+FROM matriculas m
+INNER JOIN cursos c ON c.id = m.curso_id
+ORDER BY m.created_at DESC;
+
+-- 3.6 Últimas matrículas registradas
+SELECT
+    m.nombre_estudiante,
+    m.codigo_estudiante,
+    c.nombre AS curso,
+    m.created_at
+FROM matriculas m
+INNER JOIN cursos c ON c.id = m.curso_id
+ORDER BY m.created_at DESC
+LIMIT 10;
+
+-- 3.7 Estudiantes matriculados por curso
+SELECT
+    c.codigo,
+    c.nombre AS curso,
+    COUNT(m.id) AS total_matriculados
+FROM cursos c
+LEFT JOIN matriculas m ON m.curso_id = c.id
+GROUP BY c.id, c.codigo, c.nombre
+ORDER BY total_matriculados DESC;
+
+
+-- ============================================================
+-- PREGUNTA 4 - TAREAS ACADÉMICAS
+-- Tabla: tareas
+-- API: GET/POST/PUT/DELETE /api/tareas
+-- ============================================================
+
+-- 4.1 Listar todas las tareas
+SELECT id, titulo, curso, fecha_entrega, estado, prioridad, created_at
+FROM tareas
+ORDER BY fecha_entrega;
+
+-- 4.2 Tareas vencidas (fecha pasada)
+SELECT id, titulo, curso, fecha_entrega, estado, prioridad
+FROM tareas
+WHERE fecha_entrega < CURRENT_DATE
+ORDER BY fecha_entrega;
+
+-- 4.3 Tareas urgentes
+SELECT id, titulo, curso, fecha_entrega, estado, prioridad
+FROM tareas
+WHERE prioridad = 'URGENTE'
+ORDER BY fecha_entrega;
+
+-- 4.4 Tareas por prioridad
+SELECT prioridad, COUNT(*) AS cantidad
+FROM tareas
+GROUP BY prioridad
+ORDER BY
+    CASE prioridad
+        WHEN 'URGENTE' THEN 1
+        WHEN 'ALTA'     THEN 2
+        WHEN 'MEDIA'    THEN 3
+        WHEN 'BAJA'     THEN 4
+    END;
+
+-- 4.5 Tareas por curso
+SELECT curso, COUNT(*) AS total_tareas
+FROM tareas
+GROUP BY curso
+ORDER BY total_tareas DESC;
+
+-- 4.6 Tareas pendientes con fecha próxima (7 días)
+SELECT titulo, curso, fecha_entrega, prioridad
+FROM tareas
+WHERE estado ILIKE '%pendiente%'
+  AND fecha_entrega BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '7 days'
+ORDER BY fecha_entrega;
+
+-- 4.7 Vista completa para el profesor (vencidas + urgentes)
+SELECT
+    titulo,
+    curso,
+    fecha_entrega,
+    estado,
+    prioridad,
+    CASE
+        WHEN fecha_entrega < CURRENT_DATE THEN 'VENCIDA'
+        WHEN prioridad = 'URGENTE' THEN 'URGENTE'
+        ELSE 'NORMAL'
+    END AS alerta
+FROM tareas
+ORDER BY fecha_entrega;
+
+
+-- ============================================================
+-- CONSULTAS EXTRA (relaciones entre módulos)
+-- ============================================================
+
+-- Estructura de tablas en la base de datos
+SELECT
+    table_name AS tabla,
+    (SELECT COUNT(*) FROM information_schema.columns c
+     WHERE c.table_name = t.table_name AND c.table_schema = 'public') AS columnas
+FROM information_schema.tables t
+WHERE table_schema = 'public'
+  AND table_type = 'BASE TABLE'
+  AND table_name IN ('productos', 'pedidos', 'incidencias', 'cursos', 'matriculas', 'tareas', 'schema_migrations')
+ORDER BY table_name;
