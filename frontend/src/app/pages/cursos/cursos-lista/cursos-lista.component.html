@@ -1,0 +1,17 @@
+<h1>Cursos disponibles</h1>
+
+@if (error) {
+  <div class="alert error">{{ error }}</div>
+}
+
+<div class="cards-grid">
+  @for (curso of cursos; track curso.id) {
+    <article class="course-card">
+      <h2>{{ curso.nombre }}</h2>
+      <p><strong>Código:</strong> {{ curso.codigo }}</p>
+      <p><strong>Docente:</strong> {{ curso.docente }}</p>
+      <p><strong>Créditos:</strong> {{ curso.creditos }}</p>
+      <p><strong>Vacantes:</strong> {{ curso.vacantes }}</p>
+    </article>
+  }
+</div>

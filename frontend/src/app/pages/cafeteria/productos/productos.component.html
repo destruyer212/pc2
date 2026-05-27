@@ -1,0 +1,19 @@
+<h1>Productos - Cafetería UTP</h1>
+
+@if (error) {
+  <div class="alert error">{{ error }}</div>
+}
+
+<div class="cards-grid">
+  @for (producto of productos; track producto.id) {
+    <article class="product-card" [class.sin-stock]="producto.stock === 0">
+      <h2>{{ producto.nombre }}</h2>
+      <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
+      <p><strong>Precio:</strong> {{ producto.precio | currency:'PEN':'symbol':'1.2-2' }}</p>
+      <p><strong>Stock:</strong> {{ producto.stock }}</p>
+      @if (producto.stock === 0) {
+        <span class="badge">Sin stock</span>
+      }
+    </article>
+  }
+</div>

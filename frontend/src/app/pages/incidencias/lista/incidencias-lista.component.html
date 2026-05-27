@@ -1,0 +1,40 @@
+<h1>Lista de incidencias</h1>
+
+@if (mensaje) {
+  <div class="alert success">{{ mensaje }}</div>
+}
+@if (error) {
+  <div class="alert error">{{ error }}</div>
+}
+
+<table>
+  <thead>
+    <tr>
+      <th>Aula</th>
+      <th>Equipo</th>
+      <th>Tipo</th>
+      <th>Descripción</th>
+      <th>Estado</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (inc of incidencias; track inc.id) {
+      <tr [class]="claseEstado(inc.estado)">
+        <td>{{ inc.aula }}</td>
+        <td>{{ inc.equipo }}</td>
+        <td>{{ inc.tipo }}</td>
+        <td>{{ inc.descripcion }}</td>
+        <td>{{ inc.estado }}</td>
+        <td>
+          <select #estadoSelect [value]="inc.estado">
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="EN_PROCESO">En proceso</option>
+            <option value="ATENDIDA">Atendida</option>
+          </select>
+          <button type="button" (click)="cambiarEstado(inc.id, $any(estadoSelect.value))">Actualizar</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

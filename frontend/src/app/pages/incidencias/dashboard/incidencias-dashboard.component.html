@@ -1,0 +1,10 @@
+<h1>Dashboard de incidencias</h1>
+
+@if (error) {
+  <div class="alert error">{{ error }}</div>
+} @else {
+  <div class="stat-card">
+    <span>Total de incidencias registradas</span>
+    <strong>{{ total }}</strong>
+  </div>
+}

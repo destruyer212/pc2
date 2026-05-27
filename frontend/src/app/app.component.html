@@ -1,0 +1,14 @@
+<header class="navbar">
+  <a routerLink="/" class="brand">{{ title }}</a>
+  <nav>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+    <a routerLink="/cafeteria/productos" routerLinkActive="active">Cafetería</a>
+    <a routerLink="/incidencias/dashboard" routerLinkActive="active">Incidencias</a>
+    <a routerLink="/cursos" routerLinkActive="active">Cursos</a>
+    <a routerLink="/tareas" routerLinkActive="active">Tareas</a>
+  </nav>
+</header>
+
+<main class="container">
+  <router-outlet />
+</main>

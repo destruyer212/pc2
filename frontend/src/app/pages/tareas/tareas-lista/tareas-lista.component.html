@@ -1,0 +1,52 @@
+<h1>Tareas académicas</h1>
+
+@if (mensaje) {
+  <div class="alert success">{{ mensaje }}</div>
+}
+@if (error) {
+  <div class="alert error">{{ error }}</div>
+}
+
+<div class="cards-grid">
+  @for (tarea of tareas; track tarea.id) {
+    <article class="task-card">
+      <h2>{{ tarea.titulo }}</h2>
+      <p><strong>Curso:</strong> {{ tarea.curso }}</p>
+      <p><strong>Fecha:</strong> {{ tarea.fechaEntrega | date:'dd/MM/yyyy' }}</p>
+      <p><strong>Estado:</strong> {{ tarea.estado }}</p>
+      <p><strong>Prioridad:</strong> {{ tarea.prioridad }}</p>
+
+      @if (esVencida(tarea.fechaEntrega)) {
+        <div class="alert error">Tarea vencida</div>
+      }
+      @if (esUrgente(tarea.prioridad)) {
+        <div class="alert warning">Tarea urgente</div>
+      }
+
+      <div class="actions">
+        <button type="button" (click)="iniciarEdicion(tarea)">Editar</button>
+        <button type="button" class="danger" (click)="eliminar(tarea.id)">Eliminar</button>
+      </div>
+    </article>
+  }
+</div>
+
+@if (editando) {
+  <section class="edit-panel">
+    <h2>Editar tarea</h2>
+    <label>Título <input [(ngModel)]="formEdicion.titulo" /></label>
+    <label>Curso <input [(ngModel)]="formEdicion.curso" /></label>
+    <label>Fecha <input type="date" [(ngModel)]="formEdicion.fechaEntrega" /></label>
+    <label>Estado <input [(ngModel)]="formEdicion.estado" /></label>
+    <label>
+      Prioridad
+      <select [(ngModel)]="formEdicion.prioridad">
+        <option value="BAJA">Baja</option>
+        <option value="MEDIA">Media</option>
+        <option value="ALTA">Alta</option>
+        <option value="URGENTE">Urgente</option>
+      </select>
+    </label>
+    <button type="button" (click)="guardarEdicion()">Guardar cambios</button>
+  </section>
+}

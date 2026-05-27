@@ -1,0 +1,32 @@
+<h1>Matrícula</h1>
+
+@if (mensaje) {
+  <div class="alert success">{{ mensaje }}</div>
+}
+@if (error) {
+  <div class="alert error">{{ error }}</div>
+}
+
+<form class="form-card" (ngSubmit)="enviar()">
+  <label>
+    Nombre del estudiante
+    <input type="text" [(ngModel)]="nombreEstudiante" name="nombreEstudiante" required />
+  </label>
+
+  <label>
+    Código del estudiante
+    <input type="text" [(ngModel)]="codigoEstudiante" name="codigoEstudiante" required />
+  </label>
+
+  <label>
+    Curso
+    <select [(ngModel)]="cursoId" name="cursoId" required>
+      <option [ngValue]="null">Seleccione un curso</option>
+      @for (curso of cursos; track curso.id) {
+        <option [ngValue]="curso.id">{{ curso.codigo }} - {{ curso.nombre }}</option>
+      }
+    </select>
+  </label>
+
+  <button type="submit">Registrar matrícula</button>
+</form>

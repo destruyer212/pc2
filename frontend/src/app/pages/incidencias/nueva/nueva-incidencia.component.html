@@ -1,0 +1,16 @@
+<h1>Nueva incidencia</h1>
+
+@if (mensaje) {
+  <div class="alert success">{{ mensaje }}</div>
+}
+@if (error) {
+  <div class="alert error">{{ error }}</div>
+}
+
+<form class="form-card" (ngSubmit)="enviar()">
+  <label>Aula <input type="text" [(ngModel)]="aula" name="aula" required /></label>
+  <label>Equipo <input type="text" [(ngModel)]="equipo" name="equipo" required /></label>
+  <label>Tipo <input type="text" [(ngModel)]="tipo" name="tipo" required /></label>
+  <label>Descripción <textarea rows="3" [(ngModel)]="descripcion" name="descripcion" required></textarea></label>
+  <button type="submit">Registrar incidencia</button>
+</form>
