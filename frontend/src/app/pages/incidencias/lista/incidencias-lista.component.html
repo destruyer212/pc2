@@ -1,40 +1,77 @@
-<h1>Lista de incidencias</h1>
+<div class="page">
+  <app-page-header
+    breadcrumb="Pregunta 2 · Incidencias"
+    title="Lista de incidencias"
+    subtitle="Tabla con todas las incidencias. Cambia el estado con el selector y confirma la actualización."
+  >
+    <a routerLink="/incidencias/nueva" class="btn btn-primary">+ Nueva</a>
+  </app-page-header>
 
-@if (mensaje) {
-  <div class="alert success">{{ mensaje }}</div>
-}
-@if (error) {
-  <div class="alert error">{{ error }}</div>
-}
+  <app-subnav [items]="subnav" />
 
-<table>
-  <thead>
-    <tr>
-      <th>Aula</th>
-      <th>Equipo</th>
-      <th>Tipo</th>
-      <th>Descripción</th>
-      <th>Estado</th>
-      <th>Acción</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (inc of incidencias; track inc.id) {
-      <tr [class]="claseEstado(inc.estado)">
-        <td>{{ inc.aula }}</td>
-        <td>{{ inc.equipo }}</td>
-        <td>{{ inc.tipo }}</td>
-        <td>{{ inc.descripcion }}</td>
-        <td>{{ inc.estado }}</td>
-        <td>
-          <select #estadoSelect [value]="inc.estado">
-            <option value="PENDIENTE">Pendiente</option>
-            <option value="EN_PROCESO">En proceso</option>
-            <option value="ATENDIDA">Atendida</option>
-          </select>
-          <button type="button" (click)="cambiarEstado(inc.id, $any(estadoSelect.value))">Actualizar</button>
-        </td>
-      </tr>
-    }
-  </tbody>
-</table>
+  @if (mensaje) {
+    <div class="alert success">{{ mensaje }}</div>
+  }
+  @if (error) {
+    <div class="alert error">{{ error }}</div>
+  }
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando incidencias...</p>
+    </div>
+  } @else if (incidencias.length === 0) {
+    <div class="empty-state">
+      <p>No hay incidencias registradas.</p>
+      <a routerLink="/incidencias/nueva" class="btn btn-primary" style="margin-top: 1rem;">Crear primera incidencia</a>
+    </div>
+  } @else {
+    <div class="table-panel">
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Aula</th>
+              <th>Equipo</th>
+              <th>Tipo</th>
+              <th>Descripción</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (inc of incidencias; track inc.id) {
+              <tr>
+                <td><strong>{{ inc.aula }}</strong></td>
+                <td>{{ inc.equipo }}</td>
+                <td>{{ inc.tipo }}</td>
+                <td>{{ inc.descripcion }}</td>
+                <td>
+                  <span [class]="badgeEstado(inc.estado)">{{ etiquetaEstado(inc.estado) }}</span>
+                </td>
+                <td>
+                  <div class="actions-cell">
+                    <select #estadoSelect [value]="inc.estado">
+                      <option value="PENDIENTE">Pendiente</option>
+                      <option value="EN_PROCESO">En proceso</option>
+                      <option value="ATENDIDA">Atendida</option>
+                    </select>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-primary"
+                      [disabled]="actualizandoId === inc.id"
+                      (click)="cambiarEstado(inc.id, $any(estadoSelect.value))"
+                    >
+                      {{ actualizandoId === inc.id ? '...' : 'Actualizar' }}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>

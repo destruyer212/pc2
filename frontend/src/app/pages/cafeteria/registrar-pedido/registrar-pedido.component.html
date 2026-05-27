@@ -1,37 +1,59 @@
-<h1>Registrar pedido</h1>
+<div class="page">
+  <app-page-header
+    breadcrumb="Pregunta 1 · Cafetería"
+    title="Registrar pedido"
+    subtitle="Complete el formulario para enviar un pedido al endpoint POST /api/pedidos."
+  />
 
-@if (mensaje) {
-  <div class="alert success">{{ mensaje }}</div>
-}
-@if (error) {
-  <div class="alert error">{{ error }}</div>
-}
+  <app-subnav [items]="subnav" />
 
-<form class="form-card" (ngSubmit)="enviar()">
-  <label>
-    Nombre del estudiante
-    <input type="text" [(ngModel)]="nombreEstudiante" name="nombreEstudiante" required />
-  </label>
+  @if (mensaje) {
+    <div class="alert success">{{ mensaje }}</div>
+  }
+  @if (error) {
+    <div class="alert error">{{ error }}</div>
+  }
 
-  <label>
-    Producto
-    <select [(ngModel)]="productoId" name="productoId" required>
-      <option [ngValue]="null">Seleccione un producto</option>
-      @for (producto of productos; track producto.id) {
-        <option [ngValue]="producto.id">{{ producto.nombre }} (Stock: {{ producto.stock }})</option>
-      }
-    </select>
-  </label>
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando productos disponibles...</p>
+    </div>
+  } @else {
+    <form class="form-panel" (ngSubmit)="enviar()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="nombre">Nombre del estudiante *</label>
+          <input id="nombre" type="text" [(ngModel)]="nombreEstudiante" name="nombreEstudiante" placeholder="Ej. Juan Pérez" required />
+        </div>
 
-  <label>
-    Cantidad
-    <input type="number" min="1" [(ngModel)]="cantidad" name="cantidad" required />
-  </label>
+        <div class="form-group">
+          <label for="producto">Producto *</label>
+          <select id="producto" [(ngModel)]="productoId" name="productoId" required>
+            <option [ngValue]="null">Seleccione un producto</option>
+            @for (producto of productos; track producto.id) {
+              <option [ngValue]="producto.id">{{ producto.nombre }} — Stock: {{ producto.stock }}</option>
+            }
+          </select>
+        </div>
 
-  <label>
-    Observación
-    <textarea rows="3" [(ngModel)]="observacion" name="observacion"></textarea>
-  </label>
+        <div class="form-group">
+          <label for="cantidad">Cantidad *</label>
+          <input id="cantidad" type="number" min="1" [(ngModel)]="cantidad" name="cantidad" required />
+        </div>
 
-  <button type="submit">Enviar pedido</button>
-</form>
+        <div class="form-group">
+          <label for="obs">Observación</label>
+          <textarea id="obs" rows="3" [(ngModel)]="observacion" name="observacion" placeholder="Sin azúcar, para llevar..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="enviando">
+          {{ enviando ? 'Enviando...' : 'Confirmar pedido' }}
+        </button>
+        <a routerLink="/cafeteria/productos" class="btn btn-secondary">Volver al catálogo</a>
+      </div>
+    </form>
+  }
+</div>

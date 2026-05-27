@@ -1,14 +1,84 @@
-<header class="navbar">
-  <a routerLink="/" class="brand">{{ title }}</a>
-  <nav>
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
-    <a routerLink="/cafeteria/productos" routerLinkActive="active">Cafetería</a>
-    <a routerLink="/incidencias/dashboard" routerLinkActive="active">Incidencias</a>
-    <a routerLink="/cursos" routerLinkActive="active">Cursos</a>
-    <a routerLink="/tareas" routerLinkActive="active">Tareas</a>
-  </nav>
-</header>
+<div class="app-layout">
+  <aside class="sidebar" [class.open]="sidebarOpen">
+    <div class="sidebar-brand">
+      <a routerLink="/" (click)="closeSidebar()">
+        <strong>{{ title }}</strong>
+        <span>Plataforma Académica Integrada</span>
+      </a>
+    </div>
 
-<main class="container">
-  <router-outlet />
-</main>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">General</div>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link" (click)="closeSidebar()">
+          <span class="nav-icon">⌂</span> Inicio
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Pregunta 1</div>
+        <a routerLink="/cafeteria/productos" routerLinkActive="active" class="nav-link" (click)="closeSidebar()">
+          <span class="nav-icon">☕</span> Productos
+        </a>
+        <a routerLink="/cafeteria/pedido" routerLinkActive="active" class="nav-link" (click)="closeSidebar()">
+          <span class="nav-icon">🛒</span> Registrar pedido
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Pregunta 2</div>
+        <a routerLink="/incidencias/dashboard" routerLinkActive="active" class="nav-link" (click)="closeSidebar()">
+          <span class="nav-icon">📊</span> Dashboard
+        </a>
+        <a routerLink="/incidencias/lista" routerLinkActive="active" class="nav-link" (click)="closeSidebar()">
+          <span class="nav-icon">📋</span> Lista
+        </a>
+        <a routerLink="/incidencias/nueva" routerLinkActive="active" class="nav-link" (click)="closeSidebar()">
+          <span class="nav-icon">➕</span> Nueva incidencia
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Pregunta 3</div>
+        <a routerLink="/cursos" routerLinkActive="active" class="nav-link" (click)="closeSidebar()">
+          <span class="nav-icon">📚</span> Cursos
+        </a>
+        <a routerLink="/cursos/matricula" routerLinkActive="active" class="nav-link" (click)="closeSidebar()">
+          <span class="nav-icon">📝</span> Matrícula
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Pregunta 4</div>
+        <a routerLink="/tareas" routerLinkActive="active" class="nav-link" (click)="closeSidebar()">
+          <span class="nav-icon">✅</span> Mis tareas
+        </a>
+        <a routerLink="/tareas/nueva" routerLinkActive="active" class="nav-link" (click)="closeSidebar()">
+          <span class="nav-icon">📌</span> Nueva tarea
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      API: localhost:8080 · Supabase
+    </div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <button type="button" class="menu-toggle" (click)="toggleSidebar()" aria-label="Menú">☰</button>
+      <div class="topbar-status">
+        <span class="status-dot"></span>
+        Sistema conectado al backend
+      </div>
+    </header>
+
+    <main class="main-content">
+      <router-outlet />
+    </main>
+
+    <footer class="app-footer">
+      Universidad Tecnológica del Perú · PC2 Desarrollo Web {{ title }}
+    </footer>
+  </div>
+</div>

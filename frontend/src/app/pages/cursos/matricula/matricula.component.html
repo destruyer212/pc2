@@ -1,32 +1,51 @@
-<h1>Matrícula</h1>
+<div class="page">
+  <app-page-header
+    breadcrumb="Pregunta 3 · Cursos"
+    title="Solicitud de matrícula"
+    subtitle="Simula una matrícula enviando los datos al endpoint POST /api/matriculas."
+  />
 
-@if (mensaje) {
-  <div class="alert success">{{ mensaje }}</div>
-}
-@if (error) {
-  <div class="alert error">{{ error }}</div>
-}
+  <app-subnav [items]="subnav" />
 
-<form class="form-card" (ngSubmit)="enviar()">
-  <label>
-    Nombre del estudiante
-    <input type="text" [(ngModel)]="nombreEstudiante" name="nombreEstudiante" required />
-  </label>
+  @if (mensaje) {
+    <div class="alert success">{{ mensaje }}</div>
+  }
+  @if (error) {
+    <div class="alert error">{{ error }}</div>
+  }
 
-  <label>
-    Código del estudiante
-    <input type="text" [(ngModel)]="codigoEstudiante" name="codigoEstudiante" required />
-  </label>
-
-  <label>
-    Curso
-    <select [(ngModel)]="cursoId" name="cursoId" required>
-      <option [ngValue]="null">Seleccione un curso</option>
-      @for (curso of cursos; track curso.id) {
-        <option [ngValue]="curso.id">{{ curso.codigo }} - {{ curso.nombre }}</option>
-      }
-    </select>
-  </label>
-
-  <button type="submit">Registrar matrícula</button>
-</form>
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando cursos con vacantes...</p>
+    </div>
+  } @else {
+    <form class="form-panel" (ngSubmit)="enviar()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="nombre">Nombre del estudiante *</label>
+          <input id="nombre" type="text" [(ngModel)]="nombreEstudiante" name="nombreEstudiante" required />
+        </div>
+        <div class="form-group">
+          <label for="codigo">Código de estudiante *</label>
+          <input id="codigo" type="text" [(ngModel)]="codigoEstudiante" name="codigoEstudiante" placeholder="Ej. U20241234" required />
+        </div>
+        <div class="form-group">
+          <label for="curso">Curso *</label>
+          <select id="curso" [(ngModel)]="cursoId" name="cursoId" required>
+            <option [ngValue]="null">Seleccione un curso</option>
+            @for (curso of cursos; track curso.id) {
+              <option [ngValue]="curso.id">{{ curso.codigo }} — {{ curso.nombre }} ({{ curso.vacantes }} vacantes)</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="enviando">
+          {{ enviando ? 'Registrando...' : 'Confirmar matrícula' }}
+        </button>
+        <a routerLink="/cursos" class="btn btn-secondary">Ver cursos</a>
+      </div>
+    </form>
+  }
+</div>

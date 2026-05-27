@@ -1,52 +1,103 @@
-<h1>Tareas académicas</h1>
+<div class="page">
+  <app-page-header
+    breadcrumb="Pregunta 4 · Tareas"
+    title="Tareas académicas"
+    subtitle="Listado con fecha formateada, alertas de vencimiento y prioridad urgente."
+  >
+    <a routerLink="/tareas/nueva" class="btn btn-primary">+ Nueva tarea</a>
+  </app-page-header>
 
-@if (mensaje) {
-  <div class="alert success">{{ mensaje }}</div>
-}
-@if (error) {
-  <div class="alert error">{{ error }}</div>
-}
+  <app-subnav [items]="subnav" />
 
-<div class="cards-grid">
-  @for (tarea of tareas; track tarea.id) {
-    <article class="task-card">
-      <h2>{{ tarea.titulo }}</h2>
-      <p><strong>Curso:</strong> {{ tarea.curso }}</p>
-      <p><strong>Fecha:</strong> {{ tarea.fechaEntrega | date:'dd/MM/yyyy' }}</p>
-      <p><strong>Estado:</strong> {{ tarea.estado }}</p>
-      <p><strong>Prioridad:</strong> {{ tarea.prioridad }}</p>
+  @if (mensaje) {
+    <div class="alert success">{{ mensaje }}</div>
+  }
+  @if (error) {
+    <div class="alert error">{{ error }}</div>
+  }
 
-      @if (esVencida(tarea.fechaEntrega)) {
-        <div class="alert error">Tarea vencida</div>
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando tareas...</p>
+    </div>
+  } @else if (tareas.length === 0) {
+    <div class="empty-state">
+      <p>No tienes tareas registradas.</p>
+      <a routerLink="/tareas/nueva" class="btn btn-primary" style="margin-top: 1rem;">Crear tarea</a>
+    </div>
+  } @else {
+    <div class="card-grid">
+      @for (tarea of tareas; track tarea.id) {
+        <article class="card">
+          <div class="card-header">
+            <h2 class="card-title">{{ tarea.titulo }}</h2>
+            <span [class]="badgePrioridad(tarea.prioridad)">{{ tarea.prioridad }}</span>
+          </div>
+
+          @if (esVencida(tarea.fechaEntrega)) {
+            <div class="alert error" style="margin-bottom: 0.75rem; padding: 0.5rem 0.75rem;">Tarea vencida</div>
+          }
+          @if (esUrgente(tarea.prioridad)) {
+            <div class="alert warning" style="margin-bottom: 0.75rem; padding: 0.5rem 0.75rem;">Prioridad urgente</div>
+          }
+
+          <ul class="card-meta">
+            <li><span>Curso</span><strong>{{ tarea.curso }}</strong></li>
+            <li><span>Entrega</span><strong>{{ tarea.fechaEntrega | date:'dd/MM/yyyy' }}</strong></li>
+            <li><span>Estado</span><strong>{{ tarea.estado }}</strong></li>
+          </ul>
+
+          <div class="card-footer">
+            <button type="button" class="btn btn-sm btn-secondary" (click)="iniciarEdicion(tarea)">Editar</button>
+            <button type="button" class="btn btn-sm btn-danger" (click)="eliminar(tarea.id)">Eliminar</button>
+          </div>
+        </article>
       }
-      @if (esUrgente(tarea.prioridad)) {
-        <div class="alert warning">Tarea urgente</div>
-      }
-
-      <div class="actions">
-        <button type="button" (click)="iniciarEdicion(tarea)">Editar</button>
-        <button type="button" class="danger" (click)="eliminar(tarea.id)">Eliminar</button>
-      </div>
-    </article>
+    </div>
   }
 </div>
 
 @if (editando) {
-  <section class="edit-panel">
-    <h2>Editar tarea</h2>
-    <label>Título <input [(ngModel)]="formEdicion.titulo" /></label>
-    <label>Curso <input [(ngModel)]="formEdicion.curso" /></label>
-    <label>Fecha <input type="date" [(ngModel)]="formEdicion.fechaEntrega" /></label>
-    <label>Estado <input [(ngModel)]="formEdicion.estado" /></label>
-    <label>
-      Prioridad
-      <select [(ngModel)]="formEdicion.prioridad">
-        <option value="BAJA">Baja</option>
-        <option value="MEDIA">Media</option>
-        <option value="ALTA">Alta</option>
-        <option value="URGENTE">Urgente</option>
-      </select>
-    </label>
-    <button type="button" (click)="guardarEdicion()">Guardar cambios</button>
-  </section>
+  <div class="modal-backdrop" (click)="cancelarEdicion()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Editar tarea</h2>
+        <button type="button" class="modal-close" (click)="cancelarEdicion()" aria-label="Cerrar">×</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Título</label>
+          <input [(ngModel)]="formEdicion.titulo" />
+        </div>
+        <div class="form-group">
+          <label>Curso</label>
+          <input [(ngModel)]="formEdicion.curso" />
+        </div>
+        <div class="form-group">
+          <label>Fecha de entrega</label>
+          <input type="date" [(ngModel)]="formEdicion.fechaEntrega" />
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <input [(ngModel)]="formEdicion.estado" />
+        </div>
+        <div class="form-group">
+          <label>Prioridad</label>
+          <select [(ngModel)]="formEdicion.prioridad">
+            <option value="BAJA">Baja</option>
+            <option value="MEDIA">Media</option>
+            <option value="ALTA">Alta</option>
+            <option value="URGENTE">Urgente</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions" style="border-top: none; padding-top: 0;">
+        <button type="button" class="btn btn-primary" [disabled]="guardando" (click)="guardarEdicion()">
+          {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+      </div>
+    </div>
+  </div>
 }

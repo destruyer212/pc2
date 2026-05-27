@@ -1,43 +1,48 @@
-<section class="hero">
-  <h1>PC2 UTP - Sistemas Integrados</h1>
-  <p>Plataforma con los 4 casos del examen: cafetería, incidencias, cursos y tareas académicas.</p>
-</section>
+<div class="page">
+  <section class="hero">
+    <h1>Plataforma PC2 UTP</h1>
+    <p>Sistema integrado para cafetería, incidencias de laboratorio, matrículas y gestión de tareas académicas.</p>
+  </section>
 
-<div class="cards-grid">
-  <article class="module-card">
-    <h2>Pregunta 1 - Cafetería</h2>
-    <p>Consulta productos y registra pedidos de estudiantes.</p>
-    <div class="actions">
-      <a routerLink="/cafeteria/productos">Productos</a>
-      <a routerLink="/cafeteria/pedido">Registrar pedido</a>
-    </div>
-  </article>
+  <div class="module-grid">
+    <article class="module-card">
+      <div class="module-icon cafe">☕</div>
+      <h2>Cafetería UTP</h2>
+      <p>Consulta el catálogo de productos, precios en soles y registra pedidos de estudiantes.</p>
+      <div class="module-actions">
+        <a routerLink="/cafeteria/productos" class="btn btn-primary">Ver productos</a>
+        <a routerLink="/cafeteria/pedido" class="btn btn-secondary">Nuevo pedido</a>
+      </div>
+    </article>
 
-  <article class="module-card">
-    <h2>Pregunta 2 - Incidencias</h2>
-    <p>Gestiona incidencias reportadas en laboratorio.</p>
-    <div class="actions">
-      <a routerLink="/incidencias/dashboard">Dashboard</a>
-      <a routerLink="/incidencias/lista">Lista</a>
-      <a routerLink="/incidencias/nueva">Nueva incidencia</a>
-    </div>
-  </article>
+    <article class="module-card">
+      <div class="module-icon lab">🖥️</div>
+      <h2>Incidencias de laboratorio</h2>
+      <p>Reporta fallas de equipos, haz seguimiento por estado y actualiza incidencias en tiempo real.</p>
+      <div class="module-actions">
+        <a routerLink="/incidencias/dashboard" class="btn btn-primary">Dashboard</a>
+        <a routerLink="/incidencias/nueva" class="btn btn-secondary">Reportar</a>
+      </div>
+    </article>
 
-  <article class="module-card">
-    <h2>Pregunta 3 - Cursos</h2>
-    <p>Consulta cursos disponibles y simula matrículas.</p>
-    <div class="actions">
-      <a routerLink="/cursos">Cursos</a>
-      <a routerLink="/cursos/matricula">Matrícula</a>
-    </div>
-  </article>
+    <article class="module-card">
+      <div class="module-icon book">📚</div>
+      <h2>Cursos y matrícula</h2>
+      <p>Explora cursos disponibles con vacantes y simula el proceso de matrícula estudiantil.</p>
+      <div class="module-actions">
+        <a routerLink="/cursos" class="btn btn-primary">Ver cursos</a>
+        <a routerLink="/cursos/matricula" class="btn btn-secondary">Matricular</a>
+      </div>
+    </article>
 
-  <article class="module-card">
-    <h2>Pregunta 4 - Tareas</h2>
-    <p>Administra tareas académicas con prioridad y fechas.</p>
-    <div class="actions">
-      <a routerLink="/tareas">Tareas</a>
-      <a routerLink="/tareas/nueva">Nueva tarea</a>
-    </div>
-  </article>
+    <article class="module-card">
+      <div class="module-icon task">📋</div>
+      <h2>Tareas académicas</h2>
+      <p>Organiza entregas por prioridad, detecta tareas vencidas o urgentes y administra el CRUD completo.</p>
+      <div class="module-actions">
+        <a routerLink="/tareas" class="btn btn-primary">Mis tareas</a>
+        <a routerLink="/tareas/nueva" class="btn btn-secondary">Agregar</a>
+      </div>
+    </article>
+  </div>
 </div>

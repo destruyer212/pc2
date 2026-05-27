@@ -1,25 +1,52 @@
-<h1>Nueva tarea</h1>
+<div class="page">
+  <app-page-header
+    breadcrumb="Pregunta 4 · Tareas"
+    title="Nueva tarea académica"
+    subtitle="Registra una tarea con título, curso, fecha de entrega, estado y prioridad."
+  />
 
-@if (mensaje) {
-  <div class="alert success">{{ mensaje }}</div>
-}
-@if (error) {
-  <div class="alert error">{{ error }}</div>
-}
+  <app-subnav [items]="subnav" />
 
-<form class="form-card" (ngSubmit)="enviar()">
-  <label>Título <input type="text" [(ngModel)]="titulo" name="titulo" required /></label>
-  <label>Curso <input type="text" [(ngModel)]="curso" name="curso" required /></label>
-  <label>Fecha de entrega <input type="date" [(ngModel)]="fechaEntrega" name="fechaEntrega" required /></label>
-  <label>Estado <input type="text" [(ngModel)]="estado" name="estado" required /></label>
-  <label>
-    Prioridad
-    <select [(ngModel)]="prioridad" name="prioridad" required>
-      <option value="BAJA">Baja</option>
-      <option value="MEDIA">Media</option>
-      <option value="ALTA">Alta</option>
-      <option value="URGENTE">Urgente</option>
-    </select>
-  </label>
-  <button type="submit">Registrar tarea</button>
-</form>
+  @if (mensaje) {
+    <div class="alert success">{{ mensaje }}</div>
+  }
+  @if (error) {
+    <div class="alert error">{{ error }}</div>
+  }
+
+  <form class="form-panel" (ngSubmit)="enviar()">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="titulo">Título *</label>
+        <input id="titulo" type="text" [(ngModel)]="titulo" name="titulo" required />
+      </div>
+      <div class="form-group">
+        <label for="curso">Curso *</label>
+        <input id="curso" type="text" [(ngModel)]="curso" name="curso" required />
+      </div>
+      <div class="form-group">
+        <label for="fecha">Fecha de entrega *</label>
+        <input id="fecha" type="date" [(ngModel)]="fechaEntrega" name="fechaEntrega" required />
+      </div>
+      <div class="form-group">
+        <label for="estado">Estado *</label>
+        <input id="estado" type="text" [(ngModel)]="estado" name="estado" placeholder="Pendiente, En progreso..." required />
+      </div>
+      <div class="form-group">
+        <label for="prioridad">Prioridad *</label>
+        <select id="prioridad" [(ngModel)]="prioridad" name="prioridad" required>
+          <option value="BAJA">Baja</option>
+          <option value="MEDIA">Media</option>
+          <option value="ALTA">Alta</option>
+          <option value="URGENTE">Urgente</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="enviando">
+        {{ enviando ? 'Guardando...' : 'Registrar tarea' }}
+      </button>
+      <a routerLink="/tareas" class="btn btn-secondary">Ver mis tareas</a>
+    </div>
+  </form>
+</div>

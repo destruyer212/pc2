@@ -1,16 +1,43 @@
-<h1>Nueva incidencia</h1>
+<div class="page">
+  <app-page-header
+    breadcrumb="Pregunta 2 · Incidencias"
+    title="Nueva incidencia"
+    subtitle="Reporta un problema en el laboratorio. Se registrará con estado Pendiente."
+  />
 
-@if (mensaje) {
-  <div class="alert success">{{ mensaje }}</div>
-}
-@if (error) {
-  <div class="alert error">{{ error }}</div>
-}
+  <app-subnav [items]="subnav" />
 
-<form class="form-card" (ngSubmit)="enviar()">
-  <label>Aula <input type="text" [(ngModel)]="aula" name="aula" required /></label>
-  <label>Equipo <input type="text" [(ngModel)]="equipo" name="equipo" required /></label>
-  <label>Tipo <input type="text" [(ngModel)]="tipo" name="tipo" required /></label>
-  <label>Descripción <textarea rows="3" [(ngModel)]="descripcion" name="descripcion" required></textarea></label>
-  <button type="submit">Registrar incidencia</button>
-</form>
+  @if (mensaje) {
+    <div class="alert success">{{ mensaje }}</div>
+  }
+  @if (error) {
+    <div class="alert error">{{ error }}</div>
+  }
+
+  <form class="form-panel" (ngSubmit)="enviar()">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="aula">Aula *</label>
+        <input id="aula" type="text" [(ngModel)]="aula" name="aula" placeholder="Ej. Lab 301" required />
+      </div>
+      <div class="form-group">
+        <label for="equipo">Equipo *</label>
+        <input id="equipo" type="text" [(ngModel)]="equipo" name="equipo" placeholder="Ej. PC-12" required />
+      </div>
+      <div class="form-group">
+        <label for="tipo">Tipo *</label>
+        <input id="tipo" type="text" [(ngModel)]="tipo" name="tipo" placeholder="Hardware / Software" required />
+      </div>
+      <div class="form-group">
+        <label for="desc">Descripción *</label>
+        <textarea id="desc" rows="4" [(ngModel)]="descripcion" name="descripcion" placeholder="Describe el problema..." required></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="enviando">
+        {{ enviando ? 'Registrando...' : 'Registrar incidencia' }}
+      </button>
+      <a routerLink="/incidencias/lista" class="btn btn-secondary">Ver lista</a>
+    </div>
+  </form>
+</div>

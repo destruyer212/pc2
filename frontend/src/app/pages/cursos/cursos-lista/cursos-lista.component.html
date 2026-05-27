@@ -1,17 +1,53 @@
-<h1>Cursos disponibles</h1>
+<div class="page">
+  <app-page-header
+    breadcrumb="Pregunta 3 · Cursos"
+    title="Cursos disponibles"
+    subtitle="Consulta el catálogo de cursos con docente, créditos y vacantes restantes."
+  >
+    <a routerLink="/cursos/matricula" class="btn btn-primary">+ Matricularme</a>
+  </app-page-header>
 
-@if (error) {
-  <div class="alert error">{{ error }}</div>
-}
+  <app-subnav [items]="subnav" />
 
-<div class="cards-grid">
-  @for (curso of cursos; track curso.id) {
-    <article class="course-card">
-      <h2>{{ curso.nombre }}</h2>
-      <p><strong>Código:</strong> {{ curso.codigo }}</p>
-      <p><strong>Docente:</strong> {{ curso.docente }}</p>
-      <p><strong>Créditos:</strong> {{ curso.creditos }}</p>
-      <p><strong>Vacantes:</strong> {{ curso.vacantes }}</p>
-    </article>
+  @if (error) {
+    <div class="alert error">{{ error }}</div>
+  }
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando cursos...</p>
+    </div>
+  } @else if (cursos.length === 0) {
+    <div class="empty-state"><p>No hay cursos disponibles.</p></div>
+  } @else {
+    <div class="card-grid">
+      @for (curso of cursos; track curso.id) {
+        <article class="card">
+          <div class="card-header">
+            <h2 class="card-title">{{ curso.nombre }}</h2>
+            <span class="badge badge-info">{{ curso.codigo }}</span>
+          </div>
+          <ul class="card-meta">
+            <li><span>Docente</span><strong>{{ curso.docente }}</strong></li>
+            <li><span>Créditos</span><strong>{{ curso.creditos }}</strong></li>
+            <li><span>Vacantes</span>
+              <strong>
+                @if (curso.vacantes > 0) {
+                  {{ curso.vacantes }} disponibles
+                } @else {
+                  <span class="badge badge-danger">Lleno</span>
+                }
+              </strong>
+            </li>
+          </ul>
+          @if (curso.vacantes > 0) {
+            <div class="card-footer">
+              <a [routerLink]="['/cursos/matricula']" class="btn btn-sm btn-primary">Matricular</a>
+            </div>
+          }
+        </article>
+      }
+    </div>
   }
 </div>

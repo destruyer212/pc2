@@ -1,10 +1,38 @@
-<h1>Dashboard de incidencias</h1>
+<div class="page">
+  <app-page-header
+    breadcrumb="Pregunta 2 · Incidencias"
+    title="Dashboard de laboratorio"
+    subtitle="Resumen general de incidencias reportadas en los laboratorios de cómputo."
+  >
+    <a routerLink="/incidencias/nueva" class="btn btn-primary">+ Nueva incidencia</a>
+  </app-page-header>
 
-@if (error) {
-  <div class="alert error">{{ error }}</div>
-} @else {
-  <div class="stat-card">
-    <span>Total de incidencias registradas</span>
-    <strong>{{ total }}</strong>
-  </div>
-}
+  <app-subnav [items]="subnav" />
+
+  @if (error) {
+    <div class="alert error">{{ error }}</div>
+  }
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando estadísticas...</p>
+    </div>
+  } @else {
+    <div class="stat-grid">
+      <div class="stat-card">
+        <span class="stat-label">Total incidencias</span>
+        <span class="stat-value">{{ total }}</span>
+      </div>
+      <div class="stat-card accent">
+        <span class="stat-label">Módulo activo</span>
+        <span class="stat-value" style="font-size: 1.25rem; margin-top: 0.5rem;">Laboratorio</span>
+      </div>
+    </div>
+
+    <div class="module-actions" style="margin-top: 0.5rem;">
+      <a routerLink="/incidencias/lista" class="btn btn-primary">Ver lista completa</a>
+      <a routerLink="/incidencias/nueva" class="btn btn-secondary">Reportar incidencia</a>
+    </div>
+  }
+</div>
