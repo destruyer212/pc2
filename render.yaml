@@ -1,0 +1,40 @@
+# Blueprint Render: https://render.com/docs/blueprint-spec
+# Despliega backend + frontend como dos Web Services Docker
+#
+# Antes de desplegar:
+# 1. Sube el repo a GitHub
+# 2. En Render: New > Blueprint > conecta el repo
+# 3. Completa las variables secretas (password Supabase)
+# 4. Tras el primer deploy del backend, copia su URL y actualiza BACKEND_URL del frontend
+
+services:
+  - type: web
+    name: pc2-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /api/productos
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: supabase
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+
+  - type: web
+    name: pc2-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: free
+    envVars:
+      - key: BACKEND_URL
+        sync: false
+      - key: PORT
+        value: "80"
