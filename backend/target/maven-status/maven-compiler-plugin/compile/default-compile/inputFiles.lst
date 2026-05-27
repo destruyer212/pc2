@@ -6,6 +6,7 @@ C:\SpringProjects\pc2\backend\src\main\java\com\utp\pc2\cafeteria\repository\Ped
 C:\SpringProjects\pc2\backend\src\main\java\com\utp\pc2\cafeteria\repository\ProductoRepository.java
 C:\SpringProjects\pc2\backend\src\main\java\com\utp\pc2\cafeteria\service\PedidoService.java
 C:\SpringProjects\pc2\backend\src\main\java\com\utp\pc2\cafeteria\service\ProductoService.java
+C:\SpringProjects\pc2\backend\src\main\java\com\utp\pc2\common\controller\HealthController.java
 C:\SpringProjects\pc2\backend\src\main\java\com\utp\pc2\common\exception\GlobalExceptionHandler.java
 C:\SpringProjects\pc2\backend\src\main\java\com\utp\pc2\common\exception\ResourceNotFoundException.java
 C:\SpringProjects\pc2\backend\src\main\java\com\utp\pc2\config\CorsConfig.java
